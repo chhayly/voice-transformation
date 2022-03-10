@@ -1,6 +1,6 @@
 import pyaudio as pa
 import time
-from lib.transformer import *
+from lib.pitch_shifter import *
 
 class AudioHandler(object):
     def __init__(self):
@@ -10,7 +10,6 @@ class AudioHandler(object):
         self.CHUNK = 1024 * 2
         self.p = None
         self.in_stream = None
-        self.enablePitchShifting = True
         
 
     def start(self):
@@ -50,3 +49,8 @@ class AudioHandler(object):
         self.out_stream.write(np.array(augment, dtype=np.float32).tobytes())
 
         return in_data, pa.paContinue
+
+
+audio = AudioHandler()
+audio.start()     # open the the stream
+# audio.stop()
