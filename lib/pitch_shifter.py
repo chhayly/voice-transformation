@@ -20,5 +20,5 @@ def invert_polarity(signal):
     return signal * -1
 
 
-def setVolume(signal,vol):
+def set_volume(signal,vol):
   return signal*vol
