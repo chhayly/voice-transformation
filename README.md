@@ -44,6 +44,8 @@ conda config --add channels conda-forge
 conda config --set channel_priority strict
 ```
 
+Install dependancy:
+
 ```bash
 conda install --file requirements-conda.txt
 
