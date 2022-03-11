@@ -1,1 +1,1 @@
-from pitch_shifter import *
+from lib.audio_effect import *

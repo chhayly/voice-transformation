@@ -1,6 +1,6 @@
 import pyaudio as pa
 import time
-from lib.pitch_shifter import *
+from lib.audio_effect import *
 
 class AudioHandler(object):
     def __init__(self):
