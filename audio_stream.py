@@ -12,6 +12,7 @@ class AudioStream(object):
         self.p = None
         self.in_stream = None
         self.audio_effect = AudioEffect()
+        self.audio_equalizer = AudioEqualizer()
 
     def configure_stream(self, FORMAT = pa.paFloat32, CHANNEL_INPUT = 1, CHANNEL_OUTPUT = 1, RATE = 44100, CHUNK = 1024 * 2):
         #Stop the stream
@@ -58,6 +59,7 @@ class AudioStream(object):
     def _process_stream(self, in_data, frame_count, time_info, flag):
         data = np.frombuffer(in_data, dtype=np.float32)
         data = self.use_audio_effect(data)
+        data = self.audio_equalizer.equalizer_10band(data=data,fs=self.RATE)
         self.out_stream.write(np.array(data, dtype=np.float32).tobytes())
         return in_data, pa.paContinue
 
