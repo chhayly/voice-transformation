@@ -55,7 +55,7 @@ pip install -r requirements.txt
 ## Usage
 
 ```bash
-python main_UI.py
+python main.py
 ```
 
 ## License
