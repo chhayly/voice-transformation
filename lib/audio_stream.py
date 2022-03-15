@@ -8,7 +8,7 @@ class AudioStream(object):
         self.CHANNEL_INPUT = 1
         self.CHANNEL_OUTPUT = 1
         self.RATE = 44100
-        self.CHUNK = 1024 * 10
+        self.CHUNK = 1024 * 20
         self.p = None
         self.in_stream = None
         self.audio_effect = AudioEffect()
@@ -42,8 +42,8 @@ class AudioStream(object):
             self.in_stream = self.p.open(format=self.FORMAT, channels=self.CHANNEL_INPUT, rate=self.RATE,
                                      input=True, frames_per_buffer=self.CHUNK, stream_callback=self._process_stream)
             self.in_stream.start_stream()
-            while self.in_stream.is_active():
-                time.sleep(0.1)
+            # while self.in_stream.is_active():
+            #     time.sleep(0.1)
         except KeyboardInterrupt:
             self.stop()
             pass
