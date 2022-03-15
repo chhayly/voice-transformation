@@ -1,5 +1,3 @@
-"""Handles the interactive shell for the user"""
-
 import lib.audio_stream as st
 import pash.shell
 import pash.cmds
@@ -16,16 +14,18 @@ BPROMPT: str = cr.Fore.LIGHTBLUE_EX + 'voice-transformation' + \
 sh: pash.shell.Shell = pash.shell.Shell(prompt=BPROMPT)
 """The main AudioStream object"""
 audio_stream: st.AudioStream = st.AudioStream()
+ae: st.AudioEffect = audio_stream.audio_effect
+aeq: st.AudioEqualizer = audio_stream.audio_equalizer
 
 
 def audio_effect_config(cmd: pcmd.Command,
                         args: List[str],
-                        noise_percentage_factor=audio_stream.audio_effect.noise_percentage_factor,
-                        time_stretch_rate=audio_stream.audio_effect.time_stretch_rate,
-                        num_semitones=audio_stream.audio_effect.num_semitones,
-                        is_invert_polarity=audio_stream.audio_effect.is_invert_polarity,
-                        vol=audio_stream.audio_effect.vol) -> None:
-    audio_stream.audio_effect.config_parameters(
+                        noise_percentage_factor=ae.noise_percentage_factor,
+                        time_stretch_rate=ae.time_stretch_rate,
+                        num_semitones=ae.num_semitones,
+                        is_invert_polarity=ae.is_invert_polarity,
+                        vol=ae.vol) -> None:
+    ae.config_parameters(
         noise_percentage_factor,
         time_stretch_rate,
         num_semitones,
@@ -34,18 +34,18 @@ def audio_effect_config(cmd: pcmd.Command,
 
 def audio_equalizer_config(cmd: pcmd.Command,
                            args: List[str],
-                           gain1=audio_stream.audio_equalizer.gain1,
-                           gain2=audio_stream.audio_equalizer.gain2,
-                           gain3=audio_stream.audio_equalizer.gain3,
-                           gain4=audio_stream.audio_equalizer.gain4,
-                           gain5=audio_stream.audio_equalizer.gain5,
-                           gain6=audio_stream.audio_equalizer.gain6,
-                           gain7=audio_stream.audio_equalizer.gain7,
-                           gain8=audio_stream.audio_equalizer.gain8,
-                           gain9=audio_stream.audio_equalizer.gain9,
-                           gain10=audio_stream.audio_equalizer.gain10) -> None:
+                           gain1=aeq.gain1,
+                           gain2=aeq.gain2,
+                           gain3=aeq.gain3,
+                           gain4=aeq.gain4,
+                           gain5=aeq.gain5,
+                           gain6=aeq.gain6,
+                           gain7=aeq.gain7,
+                           gain8=aeq.gain8,
+                           gain9=aeq.gain9,
+                           gain10=aeq.gain10) -> None:
 
-    audio_stream.audio_equalizer.config_equalizer(
+    aeq.config_equalizer(
         gain1, gain2, gain3, gain4, gain5, gain6, gain7, gain8, gain9, gain10)
 
 
