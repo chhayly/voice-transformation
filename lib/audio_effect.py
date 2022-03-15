@@ -12,7 +12,7 @@ class AudioEffect(object):
         self.vol = None
         pass
 
-    def config_parameters (self, noise_percentage_factor=None, time_stretch_rate=None, num_semitones=None, is_invert_polarity=False, vol=None):
+    def config_parameters (self, noise_percentage_factor=None, time_stretch_rate=None, num_semitones=None, is_invert_polarity=0, vol=None):
         self.noise_percentage_factor = noise_percentage_factor
         self.time_stretch_rate = time_stretch_rate
         self.num_semitones = num_semitones
@@ -38,7 +38,7 @@ class AudioEffect(object):
         return librosa.effects.pitch_shift(signal, sr, self.num_semitones)
 
     def invert_polarity(self,signal):
-        if self.is_invert_polarity:
+        if self.is_invert_polarity==1:
             return -signal
         return signal
 
