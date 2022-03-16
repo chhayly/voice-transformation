@@ -1,6 +1,7 @@
 import pyaudio as pa
 import numpy as np
-from lib.transformer import AudioEffect, AudioEqualizer
+from lib.audio_effect import AudioEffect
+from lib.audio_equalizer import AudioEqualizer
 
 
 class AudioStream(object):
