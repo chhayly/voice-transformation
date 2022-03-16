@@ -1,6 +1,8 @@
 import pyaudio as pa
-import time
-from lib.transformer import *
+import numpy as np
+from lib.audio_equalizer import AudioEqualizer
+from lib.audio_effect import AudioEffect
+
 
 class AudioStream(object):
     def __init__(self):
@@ -12,42 +14,58 @@ class AudioStream(object):
         self.p = None
         self.in_stream = None
         self.audio_effect = AudioEffect()
+        self.audio_equalizer = AudioEqualizer()
 
-    def configure_stream(self, FORMAT = pa.paFloat32, CHANNEL_INPUT = 1, CHANNEL_OUTPUT = 1, RATE = 44100, CHUNK = 1024 * 2):
-        #Stop the stream
+    def configure_stream(
+        self,
+        FORMAT=pa.paFloat32,
+        CHANNEL_INPUT=1,
+        CHANNEL_OUTPUT=1,
+        RATE=44100,
+        CHUNK=1024 * 2,
+    ):
+        # Stop the stream
         self.stop(self)
 
-        #Update the stream parameters
+        # Update the stream parameters
         self.FORMAT = FORMAT
         self.CHANNEL_INPUT = CHANNEL_INPUT
         self.CHANNEL_OUTPUT = CHANNEL_OUTPUT
         self.RATE = RATE
         self.CHUNK = CHUNK
 
-        #Start the stream
+        # Start the stream
         self.start(self)
-
 
     def start(self):
         try:
             # Initialize PyAudio for Output
             self.p_out = pa.PyAudio()
-            self.out_stream = self.p_out.open(format=self.FORMAT, channels=self.CHANNEL_OUTPUT, rate=self.RATE,
-                                                   output=True, frames_per_buffer=self.CHUNK)
+            self.out_stream = self.p_out.open(
+                format=self.FORMAT,
+                channels=self.CHANNEL_OUTPUT,
+                rate=self.RATE,
+                output=True,
+                frames_per_buffer=self.CHUNK,
+            )
             self.out_stream.start_stream()
 
             # Initialize PyAudio for Input
             self.p = pa.PyAudio()
-            self.in_stream = self.p.open(format=self.FORMAT, channels=self.CHANNEL_INPUT, rate=self.RATE,
-                                     input=True, frames_per_buffer=self.CHUNK, stream_callback=self._process_stream)
+            self.in_stream = self.p.open(
+                format=self.FORMAT,
+                channels=self.CHANNEL_INPUT,
+                rate=self.RATE,
+                input=True,
+                frames_per_buffer=self.CHUNK,
+                stream_callback=self._process_stream,
+            )
             self.in_stream.start_stream()
-            while self.in_stream.is_active():
-                time.sleep(0.1)
+            # while self.in_stream.is_active():
+            #     time.sleep(0.1)
         except KeyboardInterrupt:
             self.stop()
             pass
-
-        
 
     def stop(self):
         self.in_stream.close()
@@ -58,6 +76,7 @@ class AudioStream(object):
     def _process_stream(self, in_data, frame_count, time_info, flag):
         data = np.frombuffer(in_data, dtype=np.float32)
         data = self.use_audio_effect(data)
+        data = self.audio_equalizer.equalizer_10band(data=data, fs=self.RATE)
         self.out_stream.write(np.array(data, dtype=np.float32).tobytes())
         return in_data, pa.paContinue
 
