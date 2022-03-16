@@ -54,8 +54,15 @@ pip install -r requirements.txt
 
 ## Usage
 
+CLI control
+
 ```bash
 python main.py
+```
+GUI Control
+
+```bash
+python gui.py
 ```
 
 ## License
