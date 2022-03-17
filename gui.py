@@ -8,40 +8,43 @@ from tkinter import (
     IntVar,
     Frame,
 )
-import subprocess
+# import subprocess
+import lib.audio_stream as st
 
-process: subprocess.Popen = subprocess.Popen(
-    ["python", "main.py"],
-    stdin=subprocess.PIPE,
-    stdout=subprocess.PIPE,
-    universal_newlines=True,
-    bufsize=0,
-)
+# process: subprocess.Popen = subprocess.Popen(
+#     ["python", "main.py"],
+#     stdin=subprocess.PIPE,
+#     stdout=subprocess.PIPE,
+#     universal_newlines=True,
+#     bufsize=0,
+# )
+
+"""The main AudioStream object"""
+audio_stream: st.AudioStream = st.AudioStream()
+ae: st.AudioEffect = audio_stream.audio_effect
+aeq: st.AudioEqualizer = audio_stream.audio_equalizer
 
 
 def start_streaming():
     print("start streaming")
-    process.stdin.write("stream start\n")
+    audio_stream.start()
 
 
 def stop_streaming():
     print("stop streaming")
-    process.stdin.write("stream stop\n")
+    audio_stream.stop()
 
 
 def set_stream_effect(self):
-    cmd = "stream effect -s {} -n {} -v {}\n".format(
-        num_semitones.get(),
-        noise_percentage.get() / 100,
-        volume.get() / 100,
+    audio_stream.audio_effect.config_parameters(
+        num_semitones=num_semitones.get(),
+        noise_percentage_factor=noise_percentage.get() / 100,
+        vol=volume.get() / 100,
     )
-    print(cmd)
-    process.stdin.write(cmd)
 
 
 def set_stream_equalizer(self, band_num):
-    print("stream equalizer -g{} {}\n".format(band_num, self))
-    process.stdin.write("stream equalizer -g{} {}\n".format(band_num, self))
+    setattr(aeq, "gain{}".format(band_num), int(self))
 
 
 window = Tk()

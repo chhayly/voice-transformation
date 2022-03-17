@@ -38,6 +38,8 @@ class AudioStream(object):
         self.start(self)
 
     def start(self):
+        if self.in_stream is not None and self.out_stream is not None:
+            return
         try:
             # Initialize PyAudio for Output
             self.p_out = pa.PyAudio()
@@ -68,10 +70,15 @@ class AudioStream(object):
             pass
 
     def stop(self):
-        self.in_stream.close()
-        self.p.terminate()
-        self.out_stream.close()
-        self.p_out.terminate()
+        if self.in_stream is not None:
+            self.in_stream.stop_stream()
+            self.in_stream.close()
+            self.in_stream = None
+
+        if self.out_stream is not None:
+            self.out_stream.is_stopped()
+            self.out_stream.close()
+            self.out_stream = None
 
     def _process_stream(self, in_data, frame_count, time_info, flag):
         data = np.frombuffer(in_data, dtype=np.float32)
