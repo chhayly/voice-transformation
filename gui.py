@@ -8,16 +8,7 @@ from tkinter import (
     IntVar,
     Frame,
 )
-# import subprocess
 import lib.audio_stream as st
-
-# process: subprocess.Popen = subprocess.Popen(
-#     ["python", "main.py"],
-#     stdin=subprocess.PIPE,
-#     stdout=subprocess.PIPE,
-#     universal_newlines=True,
-#     bufsize=0,
-# )
 
 """The main AudioStream object"""
 audio_stream: st.AudioStream = st.AudioStream()
@@ -134,7 +125,7 @@ for i in range(len(equalizer_band)):
 Button(frame1, text="START", width=20, height=3, command=start_streaming).grid(
     row=6, column=2
 )
-Button(frame1, text="Stop", width=20, height=3, command=stop_streaming).grid(
+Button(frame1, text="STOP", width=20, height=3, command=stop_streaming).grid(
     row=7, column=2
 )
 
