@@ -48,46 +48,24 @@ class AudioEqualizer(object):
         return filtered
 
     def equalizer_10band(self, data, fs):
-        band1 = self.__bandpass_filter(data, 20, 39, fs, order=2) * 10 ** (
-            self.gain1 / 20
-        )
-        band2 = self.__bandpass_filter(data, 40, 79, fs, order=3) * 10 ** (
-            self.gain2 / 20
-        )
-        band3 = self.__bandpass_filter(data, 80, 159, fs, order=3) * 10 ** (
-            self.gain3 / 20
-        )
-        band4 = self.__bandpass_filter(data, 160, 299, fs, order=3) * 10 ** (
-            self.gain4 / 20
-        )
-        band5 = self.__bandpass_filter(data, 300, 599, fs, order=3) * 10 ** (
-            self.gain5 / 20
-        )
-        band6 = self.__bandpass_filter(data, 600, 1199, fs, order=3) * 10 ** (
-            self.gain6 / 20
-        )
-        band7 = self.__bandpass_filter(data, 1200, 2399, fs, order=3) * 10 ** (
-            self.gain7 / 20
-        )
-        band8 = self.__bandpass_filter(data, 2400, 4999, fs, order=3) * 10 ** (
-            self.gain8 / 20
-        )
-        band9 = self.__bandpass_filter(data, 5000, 9999, fs, order=3) * 10 ** (
-            self.gain9 / 20
-        )
-        band10 = self.__bandpass_filter(data, 10000, 20000, fs, order=3) * 10 ** (
-            self.gain10 / 20
-        )
-        signal = (
-            band1
-            + band2
-            + band3
-            + band4
-            + band5
-            + band6
-            + band7
-            + band8
-            + band9
-            + band10
-        )
-        return signal
+
+        band_settings = [
+            {"lower": 20, "upper": 39, "order": 2, "gain": self.gain1},
+            {"lower": 40, "upper": 79, "order": 3, "gain": self.gain2},
+            {"lower": 80, "upper": 159, "order": 3, "gain": self.gain3},
+            {"lower": 160, "upper": 299, "order": 3, "gain": self.gain4},
+            {"lower": 300, "upper": 599, "order": 3, "gain": self.gain5},
+            {"lower": 600, "upper": 1199, "order": 3, "gain": self.gain6},
+            {"lower": 1200, "upper": 2399, "order": 3, "gain": self.gain7},
+            {"lower": 2400, "upper": 4999, "order": 3, "gain": self.gain8},
+            {"lower": 5000, "upper": 9999, "order": 3, "gain": self.gain9},
+            {"lower": 10000, "upper": 20000, "order": 3, "gain": self.gain10},
+        ]
+        bands = []
+        for setting in band_settings:
+            bands.append(
+                self.__bandpass_filter(
+                    data, setting["lower"], setting["upper"], fs, setting["order"]
+                ) * 10 ** (setting["gain"] / 20)
+            )
+        return sum(bands)
