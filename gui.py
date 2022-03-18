@@ -94,8 +94,8 @@ def vertical_scale(label, row, col, frame):
     var = Scale(
         label=label,
         master=frame,
-        from_=-200,
-        to=200,
+        from_=20,
+        to=-100,
         length=200,
         orient=VERTICAL,
         command=set_gain,
