@@ -16,12 +16,14 @@ class AudioStream(object):
         self.audio_effect = AudioEffect()
         self.audio_equalizer = AudioEqualizer()
 
-    def configure_stream(self,
-                         FORMAT=pa.paFloat32,
-                         CHANNEL_INPUT=1,
-                         CHANNEL_OUTPUT=1,
-                         RATE=44100,
-                         CHUNK=1024 * 2):
+    def configure_stream(
+        self,
+        FORMAT=pa.paFloat32,
+        CHANNEL_INPUT=1,
+        CHANNEL_OUTPUT=1,
+        RATE=44100,
+        CHUNK=1024 * 2,
+    ):
         # Stop the stream
         self.stop(self)
 
@@ -36,24 +38,30 @@ class AudioStream(object):
         self.start(self)
 
     def start(self):
+        if self.in_stream is not None and self.out_stream is not None:
+            return
         try:
             # Initialize PyAudio for Output
             self.p_out = pa.PyAudio()
-            self.out_stream = self.p_out.open(format=self.FORMAT,
-                                              channels=self.CHANNEL_OUTPUT,
-                                              rate=self.RATE,
-                                              output=True,
-                                              frames_per_buffer=self.CHUNK)
+            self.out_stream = self.p_out.open(
+                format=self.FORMAT,
+                channels=self.CHANNEL_OUTPUT,
+                rate=self.RATE,
+                output=True,
+                frames_per_buffer=self.CHUNK,
+            )
             self.out_stream.start_stream()
 
             # Initialize PyAudio for Input
             self.p = pa.PyAudio()
-            self.in_stream = self.p.open(format=self.FORMAT,
-                                         channels=self.CHANNEL_INPUT,
-                                         rate=self.RATE,
-                                         input=True,
-                                         frames_per_buffer=self.CHUNK,
-                                         stream_callback=self._process_stream)
+            self.in_stream = self.p.open(
+                format=self.FORMAT,
+                channels=self.CHANNEL_INPUT,
+                rate=self.RATE,
+                input=True,
+                frames_per_buffer=self.CHUNK,
+                stream_callback=self._process_stream,
+            )
             self.in_stream.start_stream()
             # while self.in_stream.is_active():
             #     time.sleep(0.1)
@@ -62,10 +70,15 @@ class AudioStream(object):
             pass
 
     def stop(self):
-        self.in_stream.close()
-        self.p.terminate()
-        self.out_stream.close()
-        self.p_out.terminate()
+        if self.in_stream is not None:
+            self.in_stream.stop_stream()
+            self.in_stream.close()
+            self.in_stream = None
+
+        if self.out_stream is not None:
+            self.out_stream.is_stopped()
+            self.out_stream.close()
+            self.out_stream = None
 
     def _process_stream(self, in_data, frame_count, time_info, flag):
         data = np.frombuffer(in_data, dtype=np.float32)
