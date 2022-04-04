@@ -4,6 +4,7 @@ from lib.audio_effect import AudioEffect
 from lib.audio_equalizer import AudioEqualizer
 
 
+
 class AudioStream(object):
     def __init__(self):
         self.FORMAT = pa.paFloat32
@@ -47,6 +48,7 @@ class AudioStream(object):
                 format=self.FORMAT,
                 channels=self.CHANNEL_OUTPUT,
                 rate=self.RATE,
+           
                 output=True,
                 frames_per_buffer=self.CHUNK,
             )
@@ -59,6 +61,7 @@ class AudioStream(object):
                 channels=self.CHANNEL_INPUT,
                 rate=self.RATE,
                 input=True,
+           
                 frames_per_buffer=self.CHUNK,
                 stream_callback=self._process_stream,
             )
@@ -93,4 +96,6 @@ class AudioStream(object):
         signal = self.audio_effect.pitch_scale(signal, self.CHUNK)
         signal = self.audio_effect.invert_polarity(signal)
         signal = self.audio_effect.set_volume(signal)
+        signal= self.audio_effect.convert_robot(self.RATE,signal)
         return signal
+

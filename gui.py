@@ -7,6 +7,7 @@ from tkinter import (
     VERTICAL,
     IntVar,
     Frame,
+    Checkbutton
 )
 import lib.audio_stream as st
 
@@ -25,12 +26,21 @@ def stop_streaming():
     print("stop streaming")
     audio_stream.stop()
 
-
+robot=False
+def changeRobot():
+    global robot
+    if robot==False:
+        robot=True
+    else:
+        robot=False
+  
 def set_stream_effect(self):
+
     audio_stream.audio_effect.config_parameters(
         num_semitones=num_semitones.get(),
         noise_percentage_factor=noise_percentage.get() / 100,
         vol=volume.get() / 100,
+        is_robot=robot
     )
 
 
@@ -41,6 +51,8 @@ def set_stream_equalizer(self, band_num):
 window = Tk()
 window.title("Voice Transformation")
 var1 = IntVar()
+
+
 
 
 frame1 = Frame(window, padx=50, pady=50)
@@ -82,6 +94,9 @@ volume = Scale(
 volume.set(100)
 volume.grid(row=4, column=2)
 
+Button(frame1, text="Robot", width=10, height=3, command=changeRobot).grid(
+    row=5, column=2
+)
 Label(window, text="Equalizer").grid(row=0, column=2)
 frame2 = Frame(window)
 frame2.grid(column=2, row=1)
