@@ -9,6 +9,7 @@ from tkinter import (
     Frame,
     Checkbutton
 )
+from turtle import color
 import lib.audio_stream as st
 
 """The main AudioStream object"""
@@ -27,12 +28,24 @@ def stop_streaming():
     audio_stream.stop()
 
 robot=False
-def changeRobot():
+def changeRobot(btn):
     global robot
     if robot==False:
         robot=True
+        btn.configure(bg="green",fg="white")
     else:
         robot=False
+        btn.configure(bg="white", fg="black")
+
+# invert_p=False
+# def changeInvert(btn):
+#     global invert_p
+#     if invert_p==False:
+#         invert_p=True
+#         btn.configure(bg="green")
+#     else:
+#         invert_p=False
+#         btn.configure(bg="white")
   
 def set_stream_effect(self):
 
@@ -40,7 +53,8 @@ def set_stream_effect(self):
         num_semitones=num_semitones.get(),
         noise_percentage_factor=noise_percentage.get() / 100,
         vol=volume.get() / 100,
-        is_robot=robot
+        is_robot=robot,
+        # is_invert_polarity=invert_p,
     )
 
 
@@ -94,7 +108,10 @@ volume = Scale(
 volume.set(100)
 volume.grid(row=4, column=2)
 
-Button(frame1, text="Robot", width=10, height=3, command=changeRobot).grid(
+
+
+robot_btn=Button(frame1, text="Robot", width=8, height=3, command=lambda:changeRobot(robot_btn),background="white")
+robot_btn.grid(
     row=5, column=2
 )
 Label(window, text="Equalizer").grid(row=0, column=2)
