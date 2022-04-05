@@ -73,7 +73,7 @@ pyinstaller --onefile gui.py
 ```
 - If you get some erorr with sklearn run this instead
 ```bash
-pyinstaller --onefile -F --hidden-import="sklearn.utils._cython_blas" --hidden-import="sklearn.neighbors.typedefs" --hidden-import="sklearn.neighbors.quad_tree" --hidden-import="sklearn.tree._utils" --hidden-import='sklearn.utils._typedefs' --hidden-import="sklearn.neighbors._partition_nodes"  gui.py
+pyinstaller --onefile --additional-hooks=extra-hooks -F --hidden-import="sklearn.utils._cython_blas" --hidden-import="sklearn.neighbors.typedefs" --hidden-import="sklearn.neighbors.quad_tree" --hidden-import="sklearn.tree._utils" --hidden-import='sklearn.utils._typedefs' --hidden-import="sklearn.neighbors._partition_nodes"  gui.py
 ```
 - With this command file with extenstion .exe will be create in dist folder
 
