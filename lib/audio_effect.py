@@ -2,6 +2,8 @@
 from lib.robot_voice import ConvertRobot
 import numpy as np
 import librosa
+import parselmouth
+from parselmouth.praat import call
 
 
 class AudioEffect(object):
@@ -12,6 +14,7 @@ class AudioEffect(object):
         self.is_invert_polarity = False
         self.vol = None
         self.is_robot=False
+        self.factor=2
         pass
 
     def config_parameters(
@@ -21,7 +24,8 @@ class AudioEffect(object):
         num_semitones=None,
         is_invert_polarity=0,
         vol=None,
-        is_robot=False
+        is_robot=False,
+        factor=2
     ):
         self.noise_percentage_factor = noise_percentage_factor
         self.time_stretch_rate = time_stretch_rate
@@ -29,6 +33,7 @@ class AudioEffect(object):
         self.is_invert_polarity = is_invert_polarity
         self.vol = vol
         self.is_robot=is_robot
+        self.factor=factor
         pass
 
     def add_white_noise(self, signal):
@@ -62,5 +67,17 @@ class AudioEffect(object):
         if self.is_robot==True:
             signal=ConvertRobot(fs,signal)
         return signal
+    
+
+    def pitch_manipulation(self,signal):
+        sound = parselmouth.Sound(signal)
+        manipulation = call(sound, "To Manipulation", 0.01, 75, 600)
+        pitch_tier = call(manipulation, "Extract pitch tier")
+
+        call(pitch_tier, "Multiply frequencies", sound.xmin, sound.xmax, self.factor)
+
+        call([pitch_tier, manipulation], "Replace pitch tier")
+        sound_octave_up = call(manipulation, "Get resynthesis (overlap-add)")
+        return sound_octave_up
 
     

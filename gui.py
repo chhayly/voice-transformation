@@ -54,6 +54,7 @@ def set_stream_effect(self):
         noise_percentage_factor=noise_percentage.get() / 100,
         vol=volume.get() / 100,
         is_robot=robot,
+        factor=pitch_tier.get()
         # is_invert_polarity=invert_p,
     )
 
@@ -83,7 +84,7 @@ num_semitones = Scale(
 num_semitones.set(0)
 num_semitones.grid(row=1, column=2)
 
-Label(frame1, text="Noise Percentage").grid(row=3, column=1)
+Label(frame1, text="Noise Percentage").grid(row=2, column=1)
 noise_percentage = Scale(
     frame1,
     from_=0,
@@ -94,7 +95,20 @@ noise_percentage = Scale(
     command=set_stream_effect,
 )
 noise_percentage.set(0)
-noise_percentage.grid(row=3, column=2)
+noise_percentage.grid(row=2, column=2)
+
+Label(frame1, text="Pitch_tier").grid(row=3, column=1)
+pitch_tier = Scale(
+    frame1,
+    from_=1,
+    to=4,
+    resolution=0.1,
+    length=200,
+    orient=HORIZONTAL,
+    command=set_stream_effect,
+)
+pitch_tier.set(1)
+pitch_tier.grid(row=3, column=2)
 
 Label(frame1, text="Volume").grid(row=4, column=1)
 volume = Scale(

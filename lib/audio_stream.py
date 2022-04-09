@@ -2,7 +2,7 @@ import pyaudio as pa
 import numpy as np
 from lib.audio_effect import AudioEffect
 from lib.audio_equalizer import AudioEqualizer
-
+import parselmouth
 
 
 class AudioStream(object):
@@ -11,7 +11,7 @@ class AudioStream(object):
         self.CHANNEL_INPUT = 1
         self.CHANNEL_OUTPUT = 1
         self.RATE = 44100
-        self.CHUNK = 1024 * 10
+        self.CHUNK = 1024 *10
         self.p = None
         self.in_stream = None
         self.audio_effect = AudioEffect()
@@ -23,7 +23,7 @@ class AudioStream(object):
         CHANNEL_INPUT=1,
         CHANNEL_OUTPUT=1,
         RATE=44100,
-        CHUNK=1024 * 2,
+        CHUNK=1024 *2,
     ):
         # Stop the stream
         self.stop(self)
@@ -48,8 +48,8 @@ class AudioStream(object):
                 format=self.FORMAT,
                 channels=self.CHANNEL_OUTPUT,
                 rate=self.RATE,
-           
                 output=True,
+        
                 frames_per_buffer=self.CHUNK,
             )
             self.out_stream.start_stream()
@@ -61,7 +61,8 @@ class AudioStream(object):
                 channels=self.CHANNEL_INPUT,
                 rate=self.RATE,
                 input=True,
-           
+            
+          
                 frames_per_buffer=self.CHUNK,
                 stream_callback=self._process_stream,
             )
@@ -86,7 +87,8 @@ class AudioStream(object):
     def _process_stream(self, in_data, frame_count, time_info, flag):
         data = np.frombuffer(in_data, dtype=np.float32)
         data = self.use_audio_effect(data)
-        data = self.audio_equalizer.equalizer_10band(data=data, fs=self.RATE)
+        # data = self.audio_equalizer.equalizer_10band(data=data, fs=self.RATE)
+    
         self.out_stream.write(np.array(data, dtype=np.float32).tobytes())
         return in_data, pa.paContinue
 
@@ -96,6 +98,8 @@ class AudioStream(object):
         signal = self.audio_effect.pitch_scale(signal, self.CHUNK)
         signal = self.audio_effect.invert_polarity(signal)
         signal = self.audio_effect.set_volume(signal)
-        signal= self.audio_effect.convert_robot(self.RATE,signal)
+        signal=self.audio_effect.convert_robot(self.RATE,signal)
+        signal =self.audio_effect.pitch_manipulation(signal)
+        print(signal)
         return signal
 
