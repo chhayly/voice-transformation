@@ -37,16 +37,7 @@ def changeRobot(btn):
         robot=False
         btn.configure(bg="white", fg="black")
 
-# invert_p=False
-# def changeInvert(btn):
-#     global invert_p
-#     if invert_p==False:
-#         invert_p=True
-#         btn.configure(bg="green")
-#     else:
-#         invert_p=False
-#         btn.configure(bg="white")
-  
+
 def set_stream_effect(self):
 
     audio_stream.audio_effect.config_parameters(
@@ -54,7 +45,7 @@ def set_stream_effect(self):
         noise_percentage_factor=noise_percentage.get() / 100,
         vol=volume.get() / 100,
         is_robot=robot,
-        # is_invert_polarity=invert_p,
+
     )
 
 
