@@ -12,6 +12,7 @@ class AudioStream(object):
         self.CHANNEL_OUTPUT = 1
         self.RATE = 44100
         self.CHUNK = 1024 *10
+        self.input_device=0
         self.p = None
         self.in_stream = None
         self.audio_effect = AudioEffect()
@@ -49,7 +50,7 @@ class AudioStream(object):
                 channels=self.CHANNEL_OUTPUT,
                 rate=self.RATE,
                 output=True,
-        
+
                 frames_per_buffer=self.CHUNK,
             )
             self.out_stream.start_stream()
@@ -61,8 +62,7 @@ class AudioStream(object):
                 channels=self.CHANNEL_INPUT,
                 rate=self.RATE,
                 input=True,
-            
-          
+                input_device_index=self.input_device,
                 frames_per_buffer=self.CHUNK,
                 stream_callback=self._process_stream,
             )
@@ -100,6 +100,7 @@ class AudioStream(object):
         signal = self.audio_effect.set_volume(signal)
         signal=self.audio_effect.convert_robot(self.RATE,signal)
         signal =self.audio_effect.pitch_manipulation(signal)
-        print(signal)
+        print(self.input_device)
+ 
         return signal
 

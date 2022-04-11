@@ -74,7 +74,7 @@ def ConvertRobot(rate,data):
 
 
     n_samples = data.shape[0]
-    print(data)
+
 
 
     d_lookup = diode_lookup(LOOKUP_SAMPLES)
