@@ -41,8 +41,6 @@ def changeRobot(btn):
         robot=False
         btn.configure(bg="white", fg="black")
 
-
-  
 def set_stream_effect(self):
 
     audio_stream.audio_effect.config_parameters(
@@ -51,7 +49,6 @@ def set_stream_effect(self):
         vol=volume.get() / 100,
         is_robot=robot,
         factor=pitch_tier.get()
- 
     )
 
 
