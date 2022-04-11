@@ -64,6 +64,19 @@ GUI Control
 ```bash
 python gui.py
 ```
+## Build using Py installer 
+- make sure you are in a virtual environemt 
+- In this specific environment should have only used library , because pyinstaller will install all library available in the environment
+- Run the command to build:
+```bash
+pyinstaller --onefile gui.py
+```
+- If you get some erorr with sklearn run this instead
+```bash
+pyinstaller --onefile --additional-hooks=extra-hooks -F --hidden-import="sklearn.utils._cython_blas" --hidden-import="sklearn.neighbors.typedefs" --hidden-import="sklearn.neighbors.quad_tree" --hidden-import="sklearn.tree._utils" --hidden-import='sklearn.utils._typedefs' --hidden-import="sklearn.neighbors._partition_nodes"  gui.py
+```
+- With this command file with extenstion .exe will be create in dist folder
+
 
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
