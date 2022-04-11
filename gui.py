@@ -7,7 +7,9 @@ from tkinter import (
     VERTICAL,
     IntVar,
     Frame,
+    Checkbutton
 )
+from turtle import color
 import lib.audio_stream as st
 
 """The main AudioStream object"""
@@ -25,12 +27,25 @@ def stop_streaming():
     print("stop streaming")
     audio_stream.stop()
 
+robot=False
+def changeRobot(btn):
+    global robot
+    if robot==False:
+        robot=True
+        btn.configure(bg="green",fg="white")
+    else:
+        robot=False
+        btn.configure(bg="white", fg="black")
+
 
 def set_stream_effect(self):
+
     audio_stream.audio_effect.config_parameters(
         num_semitones=num_semitones.get(),
         noise_percentage_factor=noise_percentage.get() / 100,
         vol=volume.get() / 100,
+        is_robot=robot,
+
     )
 
 
@@ -41,6 +56,8 @@ def set_stream_equalizer(self, band_num):
 window = Tk()
 window.title("Voice Transformation")
 var1 = IntVar()
+
+
 
 
 frame1 = Frame(window, padx=50, pady=50)
@@ -82,6 +99,12 @@ volume = Scale(
 volume.set(100)
 volume.grid(row=4, column=2)
 
+
+
+robot_btn=Button(frame1, text="Robot", width=8, height=3, command=lambda:changeRobot(robot_btn),background="white")
+robot_btn.grid(
+    row=5, column=2
+)
 Label(window, text="Equalizer").grid(row=0, column=2)
 frame2 = Frame(window)
 frame2.grid(column=2, row=1)

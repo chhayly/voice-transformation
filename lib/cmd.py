@@ -32,6 +32,8 @@ def audio_effect_config(
     num_semitones=ae.num_semitones,
     is_invert_polarity=ae.is_invert_polarity,
     vol=ae.vol,
+    is_robot=ae.is_robot
+    
 ) -> None:
     ae.config_parameters(
         noise_percentage_factor,
@@ -39,6 +41,7 @@ def audio_effect_config(
         num_semitones,
         is_invert_polarity,
         vol,
+        is_robot
     )
 
 
@@ -91,6 +94,9 @@ def start() -> None:
     )
     audio_effect.add_arg(
         "--is_invert_polarity", "-i", type=bool, help="Invert the polarity"
+    )
+    audio_effect.add_arg(
+        "--is_robot", "-r", type=bool, help="add robot voice"
     )
     audio_effect.add_arg("--vol", "-v", type=float, help="The volume")
 
