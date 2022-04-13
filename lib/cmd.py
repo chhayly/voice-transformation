@@ -32,7 +32,9 @@ def audio_effect_config(
     num_semitones=ae.num_semitones,
     is_invert_polarity=ae.is_invert_polarity,
     vol=ae.vol,
-    is_robot=ae.is_robot
+    is_robot=ae.is_robot,
+    factor=ae.factor
+
     
 ) -> None:
     ae.config_parameters(
@@ -41,7 +43,8 @@ def audio_effect_config(
         num_semitones,
         is_invert_polarity,
         vol,
-        is_robot
+        is_robot,
+        factor
     )
 
 
@@ -99,6 +102,8 @@ def start() -> None:
         "--is_robot", "-r", type=bool, help="add robot voice"
     )
     audio_effect.add_arg("--vol", "-v", type=float, help="The volume")
+    audio_effect.add_arg("--pitch-tier", "-p", type=float, help="pitch tier")
+
 
     audio_equalizer = pcmd.Command(
         "equalizer",
