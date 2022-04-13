@@ -87,7 +87,7 @@ class AudioStream(object):
     def _process_stream(self, in_data, frame_count, time_info, flag):
         data = np.frombuffer(in_data, dtype=np.float32)
         data = self.use_audio_effect(data)
-        # data = self.audio_equalizer.equalizer_10band(data=data, fs=self.RATE)
+        data = self.audio_equalizer.equalizer_10band(data=data, fs=self.RATE)
     
         self.out_stream.write(np.array(data, dtype=np.float32).tobytes())
         return in_data, pa.paContinue
@@ -100,7 +100,11 @@ class AudioStream(object):
         signal = self.audio_effect.set_volume(signal)
         signal=self.audio_effect.convert_robot(self.RATE,signal)
         signal =self.audio_effect.pitch_manipulation(signal)
-        print(self.input_device)
- 
+
+        low_freq = 300.0
+        high_freq = 3000.0
+        signal = self.audio_effect.butter_bandpass_filter(signal, low_freq, high_freq, self.RATE, order=6)
+      
+
         return signal
 
