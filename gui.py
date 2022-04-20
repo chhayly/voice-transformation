@@ -89,7 +89,7 @@ frame1.grid(column=1, row=2)
 Label(frame1, text="num semitones").grid(row=1, column=1)
 num_semitones = Scale(
     frame1,
-    from_=0,
+    from_=-10,
     to=20,
     length=200,
     orient=HORIZONTAL,
