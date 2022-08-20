@@ -59,6 +59,8 @@ def set_stream_equalizer(self, band_num):
     setattr(aeq, "gain{}".format(band_num), int(self))
 
 
+
+
 window = Tk()
 window.title("Voice Transformation")
 
@@ -73,8 +75,15 @@ devices=allInputDevices()
 OPTIONS =list(devices.keys())
 selected_device.set(OPTIONS[0]) # default value
 
+def changeMicrophone(event):
+    stop_streaming()
+    print("change microphone to "+str(event))
+    start_streaming(devices[selected_device.get()])
+
+
+
 Label(frame_header, text="Input Device").grid(row=1, column=1)
-input_device_selector = OptionMenu(frame_header, selected_device,*OPTIONS)
+input_device_selector = OptionMenu(frame_header, selected_device,*OPTIONS,command=changeMicrophone)
 input_device_selector.grid(row=1,column=2)
 
 
@@ -83,7 +92,7 @@ frame1.grid(column=1, row=2)
 Label(frame1, text="num semitones").grid(row=1, column=1)
 num_semitones = Scale(
     frame1,
-    from_=0,
+    from_=-10,
     to=20,
     length=200,
     orient=HORIZONTAL,

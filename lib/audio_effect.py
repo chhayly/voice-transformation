@@ -4,6 +4,7 @@ import numpy as np
 import librosa
 import parselmouth
 from parselmouth.praat import call
+from scipy.signal import lfilter, butter
 
 
 class AudioEffect(object):
@@ -68,6 +69,19 @@ class AudioEffect(object):
             signal=ConvertRobot(fs,signal)
         return signal
     
+
+    #telephone voice
+    def butter_params(self,low_freq, high_freq, fs, order=5):
+        nyq = 0.5 * fs
+        low = low_freq / nyq
+        high = high_freq / nyq
+        b, a = butter(order, [low, high], btype='band')
+        return b, a
+
+    def butter_bandpass_filter(self,data, low_freq, high_freq, fs, order=5):
+        b, a = self.butter_params(low_freq, high_freq, fs, order=order)
+        y = lfilter(b, a, data)
+        return y
 
     def pitch_manipulation(self,signal):
         sound = parselmouth.Sound(signal)
